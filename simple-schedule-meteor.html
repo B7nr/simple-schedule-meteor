@@ -1,0 +1,21 @@
+<head>
+  <title>Ben's Swim Lesson Scheduling Calender</title>
+</head>
+
+<body>
+<div class="container">
+    <header>
+        <h1>Time Slots</h1>
+    </header>
+
+    <ul>
+        {{#each slots}}
+            {{> calender}}
+        {{/each}}
+    </ul>
+</div>
+</body>
+
+<template name="calender">
+    <li>{{text}}</li>
+</template>
