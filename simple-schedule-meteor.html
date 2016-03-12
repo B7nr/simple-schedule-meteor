@@ -6,6 +6,11 @@
 <div class="container">
     <header>
         <h1>Time Slots</h1>
+        <!--// Adding Slots with a form-->
+        <form class="new-slot">
+            <input type="text" name="text" placeholder="Type to add new slots" />
+        </form>
+
     </header>
 
     <ul>
@@ -17,5 +22,11 @@
 </body>
 
 <template name="calender">
-    <li>{{text}}</li>
+    <li class="{{#if checked}}checked{{/if}}">
+        <button class="delete">&times;</button>
+
+        <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
+
+        <span class="text">{{text}}</span>
+    </li>
 </template>
