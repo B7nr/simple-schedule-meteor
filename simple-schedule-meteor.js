@@ -30,7 +30,7 @@ if (Meteor.isClient) {
       var text = event.target.text.value;
 
       // Insert a task into the collection
-        Meteor.call("addTask", text);
+        Meteor.call("addSlot", text);
 
       // Clear form
       event.target.text.value = "";
@@ -45,7 +45,7 @@ if (Meteor.isClient) {
             Meteor.call("setChecked", this._id, ! this.checked);
         },
         "click .delete": function () {
-        Meteor.call("deleteTask", this._id);
+        Meteor.call("deleteSlot", this._id);
         }
     });
 
