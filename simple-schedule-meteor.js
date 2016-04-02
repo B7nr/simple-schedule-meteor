@@ -1,15 +1,28 @@
+
 Slots = new Mongo.Collection("slots");
 
 if (Meteor.isClient) {
   // This code only runs on the client
   Template.body.helpers({
     slots: function () {
-      return Slots.find({}, {sort: {createdAt: -1}});
+        if (Session.get("hideCompleted")) {
+            // If hide completed is checked, filter tasks
+            return Slots.find({checked: {$ne: true}}, {sort: {createdAt: -1}});
+        } else {
+            // Otherwise, return all of the tasks
+            return Slots.find({}, {sort: {createdAt: -1}});
+        }
+    },
+      hideCompleted: function () {
+          return Session.get("hideCompleted");
+      },
+      incompleteCount: function () {
+          return Slots.find({checked: {$ne: true}}).count();
     }
   });
 // Adding slots with a form
   Template.body.events({
-    "submit .new-slot": function (event) {
+    "submit .new-task": function (event) {
       // Prevent default browser form submit
       event.preventDefault();
 
@@ -17,24 +30,50 @@ if (Meteor.isClient) {
       var text = event.target.text.value;
 
       // Insert a task into the collection
-      Slots.insert({
-        text: text,
-        createdAt: new Date() // current time
-      });
+        Meteor.call("addTask", text);
 
       // Clear form
       event.target.text.value = "";
+    },
+      "change .hide-completed input": function (event) {
+          Session.set("hideCompleted", event.target.checked);
     }
   });
     Template.calender.events({
         "click .toggle-checked": function () {
             // Set the checked property to the opposite of its current value
-            Slots.update(this._id, {
-                $set: {checked: ! this.checked}
-            });
+            Meteor.call("setChecked", this._id, ! this.checked);
         },
         "click .delete": function () {
-            Slots.remove(this._id);
+        Meteor.call("deleteTask", this._id);
         }
     });
+
+    Accounts.ui.config({
+        passwordSignupFields: "USERNAME_ONLY"
+    });
 }
+
+Meteor.methods({
+    addSlot: function (text) {
+        // Make sure the user is logged in before inserting a task
+        if (! Meteor.userId()) {
+            throw new Meteor.Error("not-authorized");
+        }
+
+        Slots.insert({
+            text: text,
+            createdAt: new Date(),
+            owner: Meteor.userId(),
+            username: Meteor.user().username
+        });
+    },
+    deleteSlot: function (taskId) {
+        Slots.remove(taskId);
+    },
+    setChecked: function (taskId, setChecked) {
+        Slots.update(taskId, { $set: { checked: setChecked} });
+    }
+});
+
+
