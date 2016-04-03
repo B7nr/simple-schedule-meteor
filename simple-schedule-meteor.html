@@ -21,32 +21,32 @@
         {{/if}}
 
     </header>
-    <!--Displays Month with two spaces in front-->
-    <h2> &#160; &#160; April </h2>
     <ul>
         <!--Displays Day w/2 spaces-->
-        <h3> &#160; &#160; Sunday 3rd </h3>
-        {{#each slots}}
-            {{> calender}}
-        {{/each}}
+            {{#each slots}}
+                {{> calender}}
+            {{/each}}
 
-        <h4> &#160; &#160; Monday 4th </h4>
-        {{#each slots}}
-            {{> calender}}
-        {{/each}}
     </ul>
 </div>
 </body>
 
 <template name="calender">
+    {{#if isNewDate}}
+        <h3> &#160; &#160; {{header}} </h3>
+    {{/if}}
     <li class="{{#if checked}}checked{{/if}}">
 
         {{#if currentUser}}
         <button class="delete">&times;</button>
-
-        <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
+            {{#if disableCheckbox}}
+            <input type="checkbox" disabled checked="{{checked}}" class="toggle-checked" />
+            {{else}}
+            <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
+            {{/if}}
         {{/if}}
-
-        <span class="date"><strong>{{username}}</strong> - {{slottime}}</span>
+        <span class="date"> {{#if checked}} <strong>{{username}}</strong> - un{{/if}}available - {{slottime}}</span>
     </li>
 </template>
+
+

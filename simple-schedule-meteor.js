@@ -1,5 +1,6 @@
 
 Slots = new Mongo.Collection("slots");
+var previousDate = new Date("01-01-2000");
 
 if (Meteor.isClient) {
   // This code only runs on the client
@@ -7,10 +8,10 @@ if (Meteor.isClient) {
     slots: function () {
         if (Session.get("hideCompleted")) {
             // If hide completed is checked, filter tasks
-            return Slots.find({checked: {$ne: true}}, {sort: {createdAt: -1}});
+            return Slots.find({checked: {$ne: true}}, {sort: {date: 1}});
         } else {
             // Otherwise, return all of the tasks
-            return Slots.find({}, {sort: {createdAt: -1}});
+            return Slots.find({}, {sort: {date: 1}});
         }
     },
       hideCompleted: function () {
@@ -23,6 +24,20 @@ if (Meteor.isClient) {
     Template.calender.helpers({
         slottime: function() {
             return moment(this.date).format('l LT')
+        },
+        header: function() {
+            return moment(this.date).format('l LT')
+        },
+        disableCheckbox: function() {
+           var ownSlot = this.owner === Meteor.userId();
+           return !ownSlot && this.owner;
+        },
+        isNewDate: function () {
+            var newDate = true;
+            console.log('date:' + this.date);
+            console.log('previousDate:' + previousDate);
+            previousDate = this.date;
+            return newDate;
         }
     });
 
@@ -67,7 +82,7 @@ Meteor.methods({
             throw new Meteor.Error("not-authorized");
         }
         Slots.insert({
-            date: moment(date).format('l LT'),
+            date: new Date(date),
             createdAt: new Date(),
             owner: Meteor.userId(),
             username: Meteor.user().username
@@ -77,7 +92,13 @@ Meteor.methods({
         Slots.remove(taskId);
     },
     setChecked: function (taskId, setChecked) {
-        Slots.update(taskId, { $set: { checked: setChecked} });
+        var owner, username;
+
+        if (setChecked) {
+            owner =  Meteor.userId();
+            username = Meteor.user().username;
+        }
+        Slots.update(taskId, { $set: { checked: setChecked, owner: owner, username: username } });
     }
 });
 
