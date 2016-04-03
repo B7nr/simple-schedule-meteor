@@ -5,7 +5,7 @@
 <body>
 <div class="container">
     <header>
-        <h1>Time Slots ({{incompleteCount}})</h1>
+        <h1> Ben's Swim Lesson Scheduler ({{incompleteCount}})</h1>
 
         <label class="hide-completed">
             <input type="checkbox" checked="{{hideCompleted}}" />
@@ -14,15 +14,23 @@
 
         {{> loginButtons}}
 
-        {{#if currentUser}}
-            <form class="new-task">
-                <input type="text" name="text" placeholder="Type to add new tasks" />
-            </form>
-        {{/if}}
+        <!--{{#if currentUser}}-->
+            <!--<form class="new-task">-->
+                <!--<input type="text" name="text" placeholder="Type to add new tasks" />-->
+            <!--</form>-->
+        <!--{{/if}}-->
 
     </header>
-
+    <!--Displays Month with two spaces in front-->
+    <h2> &#160; &#160; April </h2>
     <ul>
+        <!--Displays Day w/2 spaces-->
+        <h3> &#160; &#160; Sunday 3rd </h3>
+        {{#each slots}}
+            {{> calender}}
+        {{/each}}
+
+        <h4> &#160; &#160; Monday 4th </h4>
         {{#each slots}}
             {{> calender}}
         {{/each}}
@@ -32,9 +40,12 @@
 
 <template name="calender">
     <li class="{{#if checked}}checked{{/if}}">
+
+        {{#if currentUser}}
         <button class="delete">&times;</button>
 
         <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
+        {{/if}}
 
         <span class="text"><strong>{{username}}</strong> - {{text}}</span>
     </li>
