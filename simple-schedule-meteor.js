@@ -20,6 +20,12 @@ if (Meteor.isClient) {
           return Slots.find({checked: {$ne: true}}).count();
     }
   });
+    Template.calender.helpers({
+        slottime: function() {
+            return moment(this.date).format('l LT')
+        }
+    });
+
 // Adding slots with a form
   Template.body.events({
     "submit .new-task": function (event) {
@@ -55,14 +61,13 @@ if (Meteor.isClient) {
 }
 
 Meteor.methods({
-    addSlot: function (text) {
+    addSlot: function (date) {
         // Make sure the user is logged in before inserting a task
         if (! Meteor.userId()) {
             throw new Meteor.Error("not-authorized");
         }
-
         Slots.insert({
-            text: text,
+            date: moment(date).format('l LT'),
             createdAt: new Date(),
             owner: Meteor.userId(),
             username: Meteor.user().username

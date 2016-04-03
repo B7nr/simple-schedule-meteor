@@ -14,11 +14,11 @@
 
         {{> loginButtons}}
 
-        <!--{{#if currentUser}}-->
-            <!--<form class="new-task">-->
-                <!--<input type="text" name="text" placeholder="Type to add new tasks" />-->
-            <!--</form>-->
-        <!--{{/if}}-->
+        {{#if currentUser}}
+            <form class="new-task">
+                <input type="text" name="text" placeholder="Type to add new tasks" />
+            </form>
+        {{/if}}
 
     </header>
     <!--Displays Month with two spaces in front-->
@@ -47,6 +47,6 @@
         <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
         {{/if}}
 
-        <span class="text"><strong>{{username}}</strong> - {{text}}</span>
+        <span class="date"><strong>{{username}}</strong> - {{slottime}}</span>
     </li>
 </template>
