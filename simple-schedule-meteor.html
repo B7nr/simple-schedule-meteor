@@ -45,7 +45,7 @@
             <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
             {{/if}}
         {{/if}}
-        <span class="date"> {{#if checked}} <strong>{{username}}</strong> - un{{/if}}available - {{slottime}}</span>
+        <span class="date"> {{#if checked}} - Reserved by {{else}} - Available {{/if}}  <strong>{{username}}</strong> -  {{slottime}}</span>
     </li>
 </template>
 
