@@ -5,16 +5,17 @@
 <body>
 <div class="container">
     <header>
-        <h1> Ben's Swim Lesson Scheduler ({{incompleteCount}})</h1>
+        <h1> Ben's Swim Lesson Scheduler </h1>
 
-        <label class="hide-completed">
-            <input type="checkbox" checked="{{hideCompleted}}" />
-            Hide Already Scheduled Slots
-        </label>
+        <!--<label class="hide-completed">-->
+            <!--<input type="checkbox" checked="{{hideCompleted}}" />-->
+
+            <!--Hide Already Scheduled Slots-->
+        <!--</label>-->
 
         {{> loginButtons}}
 
-        {{#if currentUser}}
+        {{#if isUserAdmin}}
             <form class="new-task">
                 <input type="text" name="text" placeholder="Type to add new tasks" />
             </form>
@@ -38,7 +39,7 @@
     <li class="{{#if checked}}checked{{/if}}">
 
         {{#if currentUser}}
-        <button class="delete">&times;</button>
+           {{#if isUserAdmin}} <button class="delete">&times;</button> {{/if}}
             {{#if disableCheckbox}}
             <input type="checkbox" disabled checked="{{checked}}" class="toggle-checked" />
             {{else}}
